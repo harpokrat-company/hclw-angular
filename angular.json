@@ -10,6 +10,9 @@
       "prefix": "lib",
       "architect": {
         "build": {
+          "assets": [
+            "projects/hclw/src/lib/assets"
+          ],
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "projects/hclw/tsconfig.lib.json",
