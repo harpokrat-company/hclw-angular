@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import HCLModule from './hcl.js';
-import '!!file-loader?name=hcl.wasm!./hcl.wasm';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,7 @@ export class HclwService {
   wasmReady = new BehaviorSubject<boolean>(false);
 
   constructor() {
-    this.instantiateWasm('hcl.wasm');
+    this.instantiateWasm('http://static.harpokrat.com/hcl/hcl.wasm');
   }
 
   private async instantiateWasm(url: string) {

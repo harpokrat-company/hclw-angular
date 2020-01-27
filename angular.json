@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "hclw": {
+    "@harpokrat/hcl": {
       "projectType": "library",
       "root": "projects/hclw",
       "sourceRoot": "projects/hclw/src",
@@ -42,7 +42,7 @@
       }
     }
   },
-  "defaultProject": "hclw",
+  "defaultProject": "@harpokrat/hcl",
   "cli": {
     "analytics": false
   }

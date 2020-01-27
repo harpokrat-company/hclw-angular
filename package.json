@@ -1,5 +1,5 @@
 {
-  "name": "hclw-angular",
+  "name": "@harpokrat/hcl",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
