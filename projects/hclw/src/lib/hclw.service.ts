@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import * as Module from '../assets/hcl.js';
-import '!!file-loader?name=hcl.wasm!../assets/hcl.wasm';
+import HCLModule from './hcl.js';
+import '!!file-loader?name=hcl.wasm!./hcl.wasm';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +34,7 @@ export class HclwService {
       },
     };
 
-    this.module = Module(moduleArgs);
+    this.module = HCLModule(moduleArgs);
   }
 
   private whenWasmReady<T>(callback: () => T): Observable<T> {

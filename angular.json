@@ -40,6 +40,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "hclw"
+    }
+  },
+  "defaultProject": "hclw",
+  "cli": {
+    "analytics": false
+  }
 }
