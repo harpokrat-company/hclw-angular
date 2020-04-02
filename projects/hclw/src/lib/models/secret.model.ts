@@ -3,7 +3,7 @@ import {HclwService} from '../hclw.service';
 export class Secret {
   hclSecret: number;
 
-  constructor(private hclwService: HclwService, content: string) {
+  constructor(private hclwService: HclwService, content: string = '') {
     this.hclSecret = hclwService.api.getSecretFromContent(content);
   }
 
