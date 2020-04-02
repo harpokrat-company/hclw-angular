@@ -4,9 +4,11 @@ import { HclwComponent } from './hclw.component';
 
 
 @NgModule({
-  declarations: [HclwComponent],
+  declarations: [
+  ],
   imports: [
   ],
-  exports: [HclwComponent]
+  exports: [
+  ]
 })
 export class HclwModule { }
