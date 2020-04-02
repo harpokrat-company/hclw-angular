@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Observable, BehaviorSubject} from 'rxjs';
+import {filter, map} from 'rxjs/operators';
 import HCLModule from './hcl.js';
 
 @Injectable({
@@ -9,32 +9,7 @@ import HCLModule from './hcl.js';
 export class HclwService {
   module: any;
 
-  private apiFunctions = {
-    getCharArrayFromString: this.module.cwrap('GetCharArrayFromString', 'string', ['number']),
-    deleteString: this.module.cwrap('DeleteString', null, ['number']),
-    getBasicAuthString: this.module.cwrap('GetBasicAuthString', 'number', ['string', 'string']),
-    getSecretFromContent: this.module.cwrap('GetSecretFromContent', 'number', ['string']),
-    getNameFromSecret: this.module.cwrap('GetNameFromSecret', 'string', ['number']),
-    getLoginFromSecret: this.module.cwrap('GetLoginFromSecret', 'string', ['number']),
-    getPasswordFromSecret: this.module.cwrap('GetPasswordFromSecret', 'string', ['number']),
-    getDomainFromSecret: this.module.cwrap('GetDomainFromSecret', 'string', ['number']),
-    getContentStringFromSecret: this.module.cwrap('GetContentStringFromSecret', 'number', ['number']),
-    updateSecretName: this.module.cwrap('UpdateSecretName', null, ['number', 'string']),
-    updateSecretLogin: this.module.cwrap('UpdateSecretLogin', null, ['number', 'string']),
-    updateSecretPassword: this.module.cwrap('UpdateSecretPassword', null, ['number', 'string']),
-    updateSecretDomain: this.module.cwrap('UpdateSecretDomain', null, ['number', 'string']),
-    deleteSecret: this.module.cwrap('DeleteSecret', null, ['number']),
-    createUser: this.module.cwrap('CreateUser', 'number', ['string', 'string', 'string', 'string']),
-    getEmailFromUser: this.module.cwrap('GetEmailFromUser', 'string', ['number']),
-    getPasswordFromUser: this.module.cwrap('GetPasswordFromUser', 'string', ['number']),
-    getFirstNameFromUser: this.module.cwrap('GetFirstNameFromUser', 'string', ['number']),
-    getLastNameFromUser: this.module.cwrap('GetLastNameFromUser', 'string', ['number']),
-    updateUserEmail: this.module.cwrap('UpdateUserEmail', null, ['number', 'string']),
-    updateUserPassword: this.module.cwrap('UpdateUserPassword', null, ['number', 'string']),
-    updateUserFirstName: this.module.cwrap('UpdateUserFirstName', null, ['number', 'string']),
-    updateUserLastName: this.module.cwrap('UpdateUserLastName', null, ['number', 'string']),
-    deleteUser: this.module.cwrap('DeleteUser', null, ['number']),
-  };
+  private apiFunctions: any;
 
   wasmReady = new BehaviorSubject<boolean>(false);
 
@@ -50,6 +25,32 @@ export class HclwService {
     const moduleArgs = {
       wasmBinary: binary,
       onRuntimeInitialized: () => {
+        this.apiFunctions = {
+          getCharArrayFromString: this.module.cwrap('GetCharArrayFromString', 'string', ['number']),
+          deleteString: this.module.cwrap('DeleteString', null, ['number']),
+          getBasicAuthString: this.module.cwrap('GetBasicAuthString', 'number', ['string', 'string']),
+          getSecretFromContent: this.module.cwrap('GetSecretFromContent', 'number', ['string']),
+          getNameFromSecret: this.module.cwrap('GetNameFromSecret', 'string', ['number']),
+          getLoginFromSecret: this.module.cwrap('GetLoginFromSecret', 'string', ['number']),
+          getPasswordFromSecret: this.module.cwrap('GetPasswordFromSecret', 'string', ['number']),
+          getDomainFromSecret: this.module.cwrap('GetDomainFromSecret', 'string', ['number']),
+          getContentStringFromSecret: this.module.cwrap('GetContentStringFromSecret', 'number', ['number']),
+          updateSecretName: this.module.cwrap('UpdateSecretName', null, ['number', 'string']),
+          updateSecretLogin: this.module.cwrap('UpdateSecretLogin', null, ['number', 'string']),
+          updateSecretPassword: this.module.cwrap('UpdateSecretPassword', null, ['number', 'string']),
+          updateSecretDomain: this.module.cwrap('UpdateSecretDomain', null, ['number', 'string']),
+          deleteSecret: this.module.cwrap('DeleteSecret', null, ['number']),
+          createUser: this.module.cwrap('CreateUser', 'number', ['string', 'string', 'string', 'string']),
+          getEmailFromUser: this.module.cwrap('GetEmailFromUser', 'string', ['number']),
+          getPasswordFromUser: this.module.cwrap('GetPasswordFromUser', 'string', ['number']),
+          getFirstNameFromUser: this.module.cwrap('GetFirstNameFromUser', 'string', ['number']),
+          getLastNameFromUser: this.module.cwrap('GetLastNameFromUser', 'string', ['number']),
+          updateUserEmail: this.module.cwrap('UpdateUserEmail', null, ['number', 'string']),
+          updateUserPassword: this.module.cwrap('UpdateUserPassword', null, ['number', 'string']),
+          updateUserFirstName: this.module.cwrap('UpdateUserFirstName', null, ['number', 'string']),
+          updateUserLastName: this.module.cwrap('UpdateUserLastName', null, ['number', 'string']),
+          deleteUser: this.module.cwrap('DeleteUser', null, ['number']),
+        };
         this.wasmReady.next(true);
       },
     };
