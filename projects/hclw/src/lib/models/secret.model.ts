@@ -3,8 +3,12 @@ import {HclwService} from '../hclw.service';
 export class Secret {
   hclSecret: number;
 
-  constructor(private hclwService: HclwService, content: string = '') {
-    this.hclSecret = hclwService.api.getSecretFromContent(content);
+  constructor(private hclwService: HclwService, key?: string, content?: string) {
+    if (key === undefined || content === undefined) {
+      this.hclSecret = hclwService.api.createSecret();
+    } else {
+      this.hclSecret = hclwService.api.getSecretFromContent(key, content);
+    }
   }
 
   public get name() {
@@ -41,5 +45,9 @@ export class Secret {
 
   public get content() {
     return this.hclwService.api.getCharArrayFromString(this.hclwService.api.getContentStringFromSecret(this.hclSecret));
+  }
+
+  public get correct_decryption() {
+    return this.hclwService.api.correctSecretDecryption(this.hclSecret);
   }
 }
