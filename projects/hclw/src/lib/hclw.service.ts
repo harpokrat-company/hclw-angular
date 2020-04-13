@@ -29,6 +29,7 @@ export class HclwService {
           getCharArrayFromString: this.module.cwrap('GetCharArrayFromString', 'string', ['number']),
           deleteString: this.module.cwrap('DeleteString', null, ['number']),
           getBasicAuthString: this.module.cwrap('GetBasicAuthString', 'number', ['string', 'string']),
+          getDerivedKey: this.module.cwrap('GetDerivedKey', 'number', ['string']),
           getSecretFromContent: this.module.cwrap('GetSecretFromContent', 'number', ['string', 'string']),
           createSecret: this.module.cwrap('CreateSecret', 'number', []),
           correctSecretDecryption: this.module.cwrap('CorrectSecretDecryption', 'number', ['number']),
@@ -72,6 +73,15 @@ export class HclwService {
       const basicAuth = this.api.getCharArrayFromString(hclString);
       this.api.deleteString(hclString);
       return basicAuth;
+    });
+  }
+
+  public getDerivedKey(password: string): Observable<string> {
+    return this.whenWasmReady<string>(() => {
+      const hclString = this.api.getDerivedKey(password);
+      const derivedKey = this.api.getCharArrayFromString(hclString);
+      this.api.deleteString(hclString);
+      return derivedKey;
     });
   }
 
