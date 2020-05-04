@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {Observable, BehaviorSubject} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 import HCLModule from './hcl.js';
+import {Secret} from './models/secret.model';
+import {User} from './models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -82,6 +84,18 @@ export class HclwService {
       const derivedKey = this.api.getCharArrayFromString(hclString);
       this.api.deleteString(hclString);
       return derivedKey;
+    });
+  }
+
+  public createSecret(key?: string, content?: string): Observable<Secret> {
+    return this.whenWasmReady<Secret>(() => {
+      return new Secret(this, key, content);
+    });
+  }
+
+  public createUser(email: string, password: string, firstName: string, lastName: string): Observable<User> {
+    return this.whenWasmReady<User>(() => {
+      return new User(this, email, password, firstName, lastName);
     });
   }
 
