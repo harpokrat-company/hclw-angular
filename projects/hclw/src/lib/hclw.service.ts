@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, BehaviorSubject} from 'rxjs';
+import {Observable, ReplaySubject} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 import HCLModule from './hcl.js';
 import {Secret} from './models/secret.model';
@@ -13,7 +13,7 @@ export class HclwService {
 
   private apiFunctions: any;
 
-  wasmReady = new BehaviorSubject<boolean>(false);
+  wasmReady = new ReplaySubject<void>();
 
   constructor() {
     this.instantiateWasm('http://static.harpokrat.com/hcl/hcl.wasm');
@@ -56,7 +56,7 @@ export class HclwService {
           updateUserLastName: this.module.cwrap('UpdateUserLastName', null, ['number', 'string']),
           deleteUser: this.module.cwrap('DeleteUser', null, ['number']),
         };
-        this.wasmReady.next(true);
+        this.wasmReady.next();
       },
     };
 
@@ -64,7 +64,7 @@ export class HclwService {
   }
 
   private whenWasmReady<T>(callback: () => T): Observable<T> {
-    return this.wasmReady.pipe(filter(value => value === true)).pipe(
+    return this.wasmReady.pipe(
       map(callback)
     );
   }
