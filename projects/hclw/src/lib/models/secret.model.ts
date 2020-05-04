@@ -43,8 +43,8 @@ export class Secret {
     this.hclwService.api.updateSecretDomain(this.hclSecret, domain);
   }
 
-  public get content() {
-    return this.hclwService.api.getCharArrayFromString(this.hclwService.api.getContentStringFromSecret(this.hclSecret));
+  public getContent(key) {
+    return this.hclwService.api.getCharArrayFromString(this.hclwService.api.getContentStringFromSecret(this.hclSecret, key));
   }
 
   public get correct_decryption() {

@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 
-
-
 @NgModule({
   declarations: [
   ],
@@ -10,4 +8,5 @@ import { NgModule } from '@angular/core';
   exports: [
   ]
 })
+
 export class HclwModule { }

@@ -37,7 +37,7 @@ export class HclwService {
           getLoginFromSecret: this.module.cwrap('GetLoginFromSecret', 'string', ['number']),
           getPasswordFromSecret: this.module.cwrap('GetPasswordFromSecret', 'string', ['number']),
           getDomainFromSecret: this.module.cwrap('GetDomainFromSecret', 'string', ['number']),
-          getContentStringFromSecret: this.module.cwrap('GetContentStringFromSecret', 'number', ['number']),
+          getContentStringFromSecret: this.module.cwrap('GetContentStringFromSecret', 'number', ['number', 'string']),
           updateSecretName: this.module.cwrap('UpdateSecretName', null, ['number', 'string']),
           updateSecretLogin: this.module.cwrap('UpdateSecretLogin', null, ['number', 'string']),
           updateSecretPassword: this.module.cwrap('UpdateSecretPassword', null, ['number', 'string']),
