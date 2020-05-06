@@ -16,7 +16,7 @@ export class HclwService {
   wasmReady = new ReplaySubject<void>();
 
   constructor() {
-    this.instantiateWasm('http://static.harpokrat.com/hcl/hcl.wasm');
+    this.instantiateWasm('https://static.harpokrat.com/hcl/hcl.wasm');
   }
 
   private async instantiateWasm(url: string) {
