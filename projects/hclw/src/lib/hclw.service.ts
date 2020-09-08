@@ -1,9 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Observable, ReplaySubject} from 'rxjs';
-import {filter, map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import HCLModule from './hcl.js';
-import {Secret} from './models/secret.model';
+import {Password} from './models/password.model';
 import {User} from './models/user.model';
+import {RSAKeyPair} from './models/rsakeypair.model';
+import {SymmetricKey} from './models/symmetrickey.model';
+import {ASecret} from './models/asecret.model';
+import {RSAPrivateKey} from './models/rsaprivatekey.model';
+import {RSAPublicKey} from './models/rsapublickey.model';
 
 @Injectable({
   providedIn: 'root'
@@ -27,24 +32,16 @@ export class HclwService {
     const moduleArgs = {
       wasmBinary: binary,
       onRuntimeInitialized: () => {
+        // TODO Refactorize using emscripten bind
+        // TODO Check bind call destructors
         this.apiFunctions = {
+          // String handling
           getCharArrayFromString: this.module.cwrap('GetCharArrayFromString', 'string', ['number']),
           deleteString: this.module.cwrap('DeleteString', null, ['number']),
+          // Random
           getBasicAuthString: this.module.cwrap('GetBasicAuthString', 'number', ['string', 'string']),
           getDerivedKey: this.module.cwrap('GetDerivedKey', 'number', ['string']),
-          getSecretFromContent: this.module.cwrap('GetSecretFromContent', 'number', ['string', 'string']),
-          createSecret: this.module.cwrap('CreateSecret', 'number', []),
-          correctSecretDecryption: this.module.cwrap('CorrectSecretDecryption', 'number', ['number']),
-          getNameFromSecret: this.module.cwrap('GetNameFromSecret', 'string', ['number']),
-          getLoginFromSecret: this.module.cwrap('GetLoginFromSecret', 'string', ['number']),
-          getPasswordFromSecret: this.module.cwrap('GetPasswordFromSecret', 'string', ['number']),
-          getDomainFromSecret: this.module.cwrap('GetDomainFromSecret', 'string', ['number']),
-          getContentStringFromSecret: this.module.cwrap('GetContentStringFromSecret', 'number', ['number', 'string']),
-          updateSecretName: this.module.cwrap('UpdateSecretName', null, ['number', 'string']),
-          updateSecretLogin: this.module.cwrap('UpdateSecretLogin', null, ['number', 'string']),
-          updateSecretPassword: this.module.cwrap('UpdateSecretPassword', null, ['number', 'string']),
-          updateSecretDomain: this.module.cwrap('UpdateSecretDomain', null, ['number', 'string']),
-          deleteSecret: this.module.cwrap('DeleteSecret', null, ['number']),
+          // User
           createUser: this.module.cwrap('CreateUser', 'number', ['string', 'string', 'string', 'string']),
           getEmailFromUser: this.module.cwrap('GetEmailFromUser', 'string', ['number']),
           getPasswordFromUser: this.module.cwrap('GetPasswordFromUser', 'string', ['number']),
@@ -55,6 +52,41 @@ export class HclwService {
           updateUserFirstName: this.module.cwrap('UpdateUserFirstName', null, ['number', 'string']),
           updateUserLastName: this.module.cwrap('UpdateUserLastName', null, ['number', 'string']),
           deleteUser: this.module.cwrap('DeleteUser', null, ['number']),
+          // RSAKeyPair
+          generateRSAKeyPair: this.module.cwrap('GenerateRSAKeyPair', 'number', ['number']),
+          getPublicKeyFromRSAKeyPair: this.module.cwrap('GetPublicKeyFromRSAKeyPair', 'number', ['number']),
+          getPrivateKeyFromRSAKeyPair: this.module.cwrap('GetPrivateKeyFromRSAKeyPair', 'number', ['number']),
+          deleteRSAKeyPair: this.module.cwrap('DeleteRSAKeyPair', null, ['number']),
+          // ASecret
+          deserializeSecret: this.module.cwrap('DeserializeSecret', 'number', ['string', 'string']),
+          serializeSecret: this.module.cwrap('SerializeSecret', 'number', ['number', 'number']),
+          getSecretCorrectDecryption: this.module.cwrap('GetSecretCorrectDecryption', 'number', ['number']),
+          getSecretTypeName: this.module.cwrap('GetSecretTypeName', 'number', ['number']),
+          deleteSecret: this.module.cwrap('DeleteSecret', null, ['number']),
+          // Password
+          createPassword: this.module.cwrap('CreatePassword', 'number', []),
+          getNameFromPassword: this.module.cwrap('GetNameFromPassword', 'string', ['number']),
+          getLoginFromPassword: this.module.cwrap('GetLoginFromPassword', 'string', ['number']),
+          getPasswordFromPassword: this.module.cwrap('GetPasswordFromPassword', 'string', ['number']),
+          getDomainFromPassword: this.module.cwrap('GetDomainFromPassword', 'string', ['number']),
+          updatePasswordName: this.module.cwrap('UpdatePasswordName', null, ['number', 'string']),
+          updatePasswordLogin: this.module.cwrap('UpdatePasswordLogin', null, ['number', 'string']),
+          updatePasswordPassword: this.module.cwrap('UpdatePasswordPassword', null, ['number', 'string']),
+          updatePasswordDomain: this.module.cwrap('UpdatePasswordDomain', null, ['number', 'string']),
+          // RSAPrivateKey
+          getOwnerFromRSAPrivateKey: this.module.cwrap('GetOwnerFromRSAPrivateKey', 'string', ['number']),
+          setRSAPrivateKeyOwner: this.module.cwrap('SetRSAPrivateKeyOwner', null, ['number', 'string']),
+          decryptMessageWithRSAPrivateKey: this.module.cwrap('DecryptMessageWithRSAPrivateKey', 'number', ['number', 'string']),
+          // RSAPublicKey
+          getOwnerFromRSAPublicKey: this.module.cwrap('GetOwnerFromRSAPublicKey', 'string', ['number']),
+          setRSAPublicKeyOwner: this.module.cwrap('SetRSAPublicKeyOwner', null, ['number', 'string']),
+          encryptMessageWithRSAPublicKey: this.module.cwrap('EncryptMessageWithRSAPublicKey', 'number', ['number', 'string']),
+          // SymmetricKey
+          createSymmetricKey: this.module.cwrap('CreateSymmetricKey', 'number', []),
+          getOwnerFromSymmetricKey: this.module.cwrap('GetOwnerFromSymmetricKey', 'string', ['number']),
+          setSymmetricKeyOwner: this.module.cwrap('SetSymmetricKeyOwner', null, ['number', 'string']),
+          getKeyFromSymmetricKey: this.module.cwrap('GetKeyFromSymmetricKey', 'string', ['number']),
+          setSymmetricKeyKey: this.module.cwrap('SetSymmetricKeyKey', null, ['number', 'string']),
         };
         this.wasmReady.next();
       },
@@ -87,15 +119,44 @@ export class HclwService {
     });
   }
 
-  public createSecret(key?: string, content?: string): Observable<Secret> {
-    return this.whenWasmReady<Secret>(() => {
-      return new Secret(this, key, content);
+  public createPassword(): Observable<Password> {
+    return this.whenWasmReady<Password>(() => {
+      return new Password(this);
     });
   }
 
-  public createUser(email: string, password: string, firstName: string, lastName: string): Observable<User> {
+  public createSymmetricKey(): Observable<SymmetricKey> {
+    return this.whenWasmReady<SymmetricKey>(() => {
+      return new SymmetricKey(this);
+    });
+  }
+
+  public generateRSAKeyPair(bits: number): Observable<RSAKeyPair> {
+    return this.whenWasmReady<RSAKeyPair>(() => {
+      return new RSAKeyPair(this, bits);
+    });
+  }
+
+  public deserializeSecret(key: string, content: string): Observable<ASecret> {
+    return this.whenWasmReady<ASecret>(() => {
+      const secret = this.api.deserializeSecret(key, content);
+      switch (this.api.getSecretTypeName(secret)) {
+        case 'password':
+          return new Password(this, secret);
+        case 'private-key':
+          return new RSAPrivateKey(this, secret);
+        case 'public-key':
+          return new RSAPublicKey(this, secret);
+        case 'symmetric-key':
+        default:
+          return new SymmetricKey(this, secret);
+      }
+    });
+  }
+
+  public createUser(email: string, password: string, firstOwner: string, lastOwner: string): Observable<User> {
     return this.whenWasmReady<User>(() => {
-      return new User(this, email, password, firstName, lastName);
+      return new User(this, email, password, firstOwner, lastOwner);
     });
   }
 
