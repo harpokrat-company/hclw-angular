@@ -58,7 +58,7 @@ export class HclwService {
           getPrivateKeyFromRSAKeyPair: this.module.cwrap('GetPrivateKeyFromRSAKeyPair', 'number', ['number']),
           deleteRSAKeyPair: this.module.cwrap('DeleteRSAKeyPair', null, ['number']),
           // ASecret
-          deserializeSecret: this.module.cwrap('DeserializeSecret', 'number', ['string', 'string']),
+          deserializeSecret: this.module.cwrap('DeserializeSecret', 'number', ['number', 'string']),
           serializeSecret: this.module.cwrap('SerializeSecret', 'number', ['number', 'number']),
           getSecretCorrectDecryption: this.module.cwrap('GetSecretCorrectDecryption', 'number', ['number']),
           getSecretTypeName: this.module.cwrap('GetSecretTypeName', 'number', ['number']),
@@ -137,7 +137,7 @@ export class HclwService {
     });
   }
 
-  public deserializeSecret(key: string, content: string): Observable<ASecret> {
+  public deserializeSecret(key: number, content: string): Observable<ASecret> {
     return this.whenWasmReady<ASecret>(() => {
       const secret = this.api.deserializeSecret(key, content);
       switch (this.api.getSecretTypeName(secret)) {
