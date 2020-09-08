@@ -10,6 +10,14 @@ export class ASecret {
     );
   }
 
+  public initializeAsymmetric() {
+    this.hclwService.api.secretInitializeAsymmetricCipher(this.hclSecret);
+  }
+
+  public initializeSymmetric() {
+    this.hclwService.api.secretInitializeSymmetricCipher(this.hclSecret);
+  }
+
   public get typeName() {
     return this.hclwService.api.getCharArrayFromString(
       this.hclwService.api.getSecretTypeName(this.hclSecret)

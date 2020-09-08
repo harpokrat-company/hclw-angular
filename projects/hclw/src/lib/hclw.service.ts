@@ -61,6 +61,8 @@ export class HclwService {
           deserializeSecret: this.module.cwrap('DeserializeSecret', 'number', ['number', 'string']),
           serializeSecret: this.module.cwrap('SerializeSecret', 'number', ['number', 'number']),
           getSecretCorrectDecryption: this.module.cwrap('GetSecretCorrectDecryption', 'number', ['number']),
+          secretInitializeAsymmetricCipher: this.module.cwrap('SecretInitializeAsymmetricCipher', null, ['number']),
+          secretInitializeSymmetricCipher: this.module.cwrap('SecretInitializeSymmetricCipher', null, ['number']),
           getSecretTypeName: this.module.cwrap('GetSecretTypeName', 'number', ['number']),
           deleteSecret: this.module.cwrap('DeleteSecret', null, ['number']),
           // Password
