@@ -19,7 +19,7 @@ export class HclwService {
     this.onWasmReady = [];
   }
 
-  private async instantiateWasm(url: string) {
+  public async instantiateWasm(url: string) {
     const wasmFile = await fetch(url);
     const buffer = await wasmFile.arrayBuffer();
     const binary = new Uint8Array(buffer);
