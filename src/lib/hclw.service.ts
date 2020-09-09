@@ -16,7 +16,7 @@ export class HclwService {
   private onWasmReady: (() => any)[];
 
   constructor() {
-    this.instantiateWasm('https://static.harpokrat.com/hcl/hcl.wasm');
+    this.instantiateWasm('https://static.harpokrat.com/hcl/hcl2.wasm');
     this.onWasmReady = [];
   }
 
