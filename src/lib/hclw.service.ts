@@ -1,6 +1,3 @@
-import {Injectable} from '@angular/core';
-import {Observable, ReplaySubject} from 'rxjs';
-import {map} from 'rxjs/operators';
 import HCLModule from './hcl.js';
 import {Password} from './models/password.model';
 import {User} from './models/user.model';
@@ -10,18 +7,17 @@ import {ASecret} from './models/asecret.model';
 import {RSAPrivateKey} from './models/rsaprivatekey.model';
 import {RSAPublicKey} from './models/rsapublickey.model';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class HclwService {
   module: any;
 
   private apiFunctions: any;
 
-  wasmReady = new ReplaySubject<void>();
+  private wasmReady: boolean;
+  private onWasmReady: (() => any)[];
 
   constructor() {
     this.instantiateWasm('https://static.harpokrat.com/hcl/hcl.wasm');
+    this.onWasmReady = [];
   }
 
   private async instantiateWasm(url: string) {
@@ -90,20 +86,28 @@ export class HclwService {
           getKeyFromSymmetricKey: this.module.cwrap('GetKeyFromSymmetricKey', 'string', ['number']),
           setSymmetricKeyKey: this.module.cwrap('SetSymmetricKeyKey', null, ['number', 'string']),
         };
-        this.wasmReady.next();
+        for (const cb of this.onWasmReady) {
+          cb();
+        }
+        this.wasmReady = true;
       },
     };
-
     this.module = HCLModule(moduleArgs);
   }
 
-  private whenWasmReady<T>(callback: () => T): Observable<T> {
-    return this.wasmReady.pipe(
-      map(callback)
-    );
+  private async whenWasmReady<T>(callback: () => T): Promise<T> {
+    if (this.wasmReady) {
+      return callback();
+    } else {
+      return new Promise<T>(resolve => {
+        this.onWasmReady.push(() => {
+          resolve(callback());
+        });
+      });
+    }
   }
 
-  public getBasicAuth(email: string, password: string): Observable<string> {
+  public getBasicAuth(email: string, password: string): Promise<string> {
     return this.whenWasmReady<string>(() => {
       const hclString = this.api.getBasicAuthString(email, password);
       const basicAuth = this.api.getCharArrayFromString(hclString);
@@ -112,7 +116,7 @@ export class HclwService {
     });
   }
 
-  public getDerivedKey(password: string): Observable<string> {
+  public getDerivedKey(password: string): Promise<string> {
     return this.whenWasmReady<string>(() => {
       const hclString = this.api.getDerivedKey(password);
       const derivedKey = this.api.getCharArrayFromString(hclString);
@@ -121,25 +125,19 @@ export class HclwService {
     });
   }
 
-  public createPassword(): Observable<Password> {
-    return this.whenWasmReady<Password>(() => {
-      return new Password(this);
-    });
-  }
-
-  public createSymmetricKey(): Observable<SymmetricKey> {
+  public createSymmetricKey(): Promise<SymmetricKey> {
     return this.whenWasmReady<SymmetricKey>(() => {
       return new SymmetricKey(this);
     });
   }
 
-  public generateRSAKeyPair(bits: number): Observable<RSAKeyPair> {
+  public generateRSAKeyPair(bits: number): Promise<RSAKeyPair> {
     return this.whenWasmReady<RSAKeyPair>(() => {
       return new RSAKeyPair(this, bits);
     });
   }
 
-  public deserializeSecret(key: number, content: string): Observable<ASecret> {
+  public deserializeSecret(key: number, content: string): Promise<ASecret> {
     return this.whenWasmReady<ASecret>(() => {
       const secret = this.api.deserializeSecret(key, content);
       switch (this.api.getSecretTypeName(secret)) {
@@ -156,9 +154,15 @@ export class HclwService {
     });
   }
 
-  public createUser(email: string, password: string, firstOwner: string, lastOwner: string): Observable<User> {
+  public createPassword(): Promise<Password> {
+    return this.whenWasmReady<Password>(() => {
+      return new Password(this);
+    });
+  }
+
+  public createUser(email: string, password: string, firstName: string, lastName: string): Promise<User> {
     return this.whenWasmReady<User>(() => {
-      return new User(this, email, password, firstOwner, lastOwner);
+      return new User(this, email, password, firstName, lastName);
     });
   }
 

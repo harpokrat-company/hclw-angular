@@ -3,7 +3,6 @@
  */
 
 export * from './lib/hclw.service';
-export * from './lib/hclw.module';
 export * from './lib/models/asecret.model';
 export * from './lib/models/password.model';
 export * from './lib/models/rsakeypair.model';
