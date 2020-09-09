@@ -24,4 +24,8 @@ export class SymmetricKey extends ASecret {
   public set key(key) {
     this.hclw.api.setSymmetricKeyKey(this.secret, key);
   }
+
+  public get encryptionKeyType() {
+    return this.hclw.api.getSymmetricKeyEncryptionKeyType(this.secret);
+  }
 }

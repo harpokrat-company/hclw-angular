@@ -674,8 +674,8 @@ var wasmMemory;
 // so this creates a (non-native-wasm) table for us.
 
 var wasmTable = new WebAssembly.Table({
-  'initial': 1055,
-  'maximum': 1055 + 0,
+  'initial': 1058,
+  'maximum': 1058 + 0,
   'element': 'anyfunc'
 });
 
@@ -1296,11 +1296,11 @@ function updateGlobalBufferAndViews(buf) {
 }
 
 var STATIC_BASE = 1024,
-    STACK_BASE = 5281168,
+    STACK_BASE = 5282816,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 38288,
-    DYNAMIC_BASE = 5281168,
-    DYNAMICTOP_PTR = 38112;
+    STACK_MAX = 39936,
+    DYNAMIC_BASE = 5282816,
+    DYNAMICTOP_PTR = 39760;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1868,7 +1868,7 @@ var ASM_CONSTS = {
 
 
 
-// STATICTOP = STATIC_BASE + 37264;
+// STATICTOP = STATIC_BASE + 38912;
 /* global initializers */  __ATINIT__.push({ func: function() { ___wasm_call_ctors() } });
 
 
@@ -2022,7 +2022,7 @@ var ASM_CONSTS = {
   
       var pointer = ___cxa_is_pointer_type(throwntype);
       // can_catch receives a **, add indirection
-      var buffer = 38272;
+      var buffer = 39920;
       HEAP32[((buffer)>>2)]=thrown;
       thrown = buffer;
       // The different catch blocks are denoted by different types.
@@ -2059,7 +2059,7 @@ var ASM_CONSTS = {
   
       var pointer = ___cxa_is_pointer_type(throwntype);
       // can_catch receives a **, add indirection
-      var buffer = 38272;
+      var buffer = 39920;
       HEAP32[((buffer)>>2)]=thrown;
       thrown = buffer;
       // The different catch blocks are denoted by different types.
@@ -4503,7 +4503,7 @@ var ASM_CONSTS = {
     }
 
   function _emscripten_get_sbrk_ptr() {
-      return 38112;
+      return 39760;
     }
 
   function _emscripten_memcpy_big(dest, src, num) {
@@ -4782,6 +4782,9 @@ var _SetSymmetricKeyOwner = Module["_SetSymmetricKeyOwner"] = createExportWrappe
 
 /** @type {function(...*):?} */
 var _GetKeyFromSymmetricKey = Module["_GetKeyFromSymmetricKey"] = createExportWrapper("GetKeyFromSymmetricKey");
+
+/** @type {function(...*):?} */
+var _GetSymmetricKeyEncryptionKeyType = Module["_GetSymmetricKeyEncryptionKeyType"] = createExportWrapper("GetSymmetricKeyEncryptionKeyType");
 
 /** @type {function(...*):?} */
 var _SetSymmetricKeyKey = Module["_SetSymmetricKeyKey"] = createExportWrapper("SetSymmetricKeyKey");

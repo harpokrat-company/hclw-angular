@@ -84,6 +84,7 @@ export class HclwService {
         getOwnerFromSymmetricKey: this.module['__zone_symbol__value'].cwrap('GetOwnerFromSymmetricKey', 'string', ['number']),
         setSymmetricKeyOwner: this.module['__zone_symbol__value'].cwrap('SetSymmetricKeyOwner', null, ['number', 'string']),
         getKeyFromSymmetricKey: this.module['__zone_symbol__value'].cwrap('GetKeyFromSymmetricKey', 'string', ['number']),
+        getSymmetricKeyEncryptionKeyType: this.module['__zone_symbol__value'].cwrap('GetSymmetricKeyEncryptionKeyType', 'string', ['number']),
         setSymmetricKeyKey: this.module['__zone_symbol__value'].cwrap('SetSymmetricKeyKey', null, ['number', 'string']),
       };
         for (const cb of this.onWasmReady) {

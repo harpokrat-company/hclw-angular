@@ -1,6 +1,6 @@
 {
   "name": "@harpokrat/hcl",
-  "version": "0.1.11",
+  "version": "0.1.18",
   "main": "bundles/harpokrat-hcl.js",
   "typings": "public-api.d.ts"
 }
