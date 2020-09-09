@@ -31,6 +31,7 @@ export class HclwService {
       onRuntimeInitialized: () => {
         this.apiFunctions = {
         // String handling
+        getExceptionMessage: this.module['__zone_symbol__value'].cwrap('GetExceptionMessage', 'number', ['number']),
         getCharArrayFromString: this.module['__zone_symbol__value'].cwrap('GetCharArrayFromString', 'string', ['number']),
         deleteString: this.module['__zone_symbol__value'].cwrap('DeleteString', null, ['number']),
         // Random
